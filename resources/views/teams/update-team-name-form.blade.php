@@ -13,7 +13,8 @@
             <x-label value="{{ __('Team Owner') }}" />
 
             <div class="flex items-center mt-2">
-                <img class="object-cover w-12 h-12 rounded-full" src="{{ $team->owner->profile_photo_url }}" alt="{{ $team->owner->name }}">
+                <img class="object-cover w-12 h-12 rounded-full" src="{{ $team->owner->profile_photo_url }}"
+                    alt="{{ $team->owner->name }}">
 
                 <div class="ml-4 leading-tight">
                     <div class="dark:text-gray-300">{{ $team->owner->name }}</div>
@@ -26,11 +27,8 @@
         <div class="col-span-6 sm:col-span-4">
             <x-label for="name" value="{{ __('Team Name') }}" />
 
-            <x-input id="name"
-                        type="text"
-                        class="block w-full mt-1"
-                        wire:model.defer="state.name"
-                        :disabled="! Gate::check('update', $team)" />
+            <x-input id="name" type="text" class="block w-full mt-1" wire:model.defer="state.name"
+                :disabled="! Gate::check('update', $team)" />
 
             <x-input-error for="name" class="mt-2" />
         </div>

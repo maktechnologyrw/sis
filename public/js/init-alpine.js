@@ -58,5 +58,8 @@ function data() {
       this.isModalOpen = false
       this.trapCleanup()
     },
+    loadPhoneInput() {
+        alert('A post was added with the id of: ');
+    }
   }
 }

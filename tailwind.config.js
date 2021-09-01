@@ -205,6 +205,7 @@ module.exports = {
         require('tailwindcss-multi-theme'),
         require('@tailwindcss/custom-forms'),
         require('@tailwindcss/ui'),
+        require('daisyui'),
         plugin(({
             addUtilities,
             e,
