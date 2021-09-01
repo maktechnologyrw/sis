@@ -32,7 +32,8 @@ class AllTeachersTable extends AbstractTable
             ->routes([
                 'index'   => ['name' => 'teachers'],
                 'create'   => ['name' => 'addTeacher'],
-                'edit'   => ['name' => 'updateTeacher', "params" => ["id" => $table->getModel()->id]]
+                'edit'   => ['name' => 'updateTeacher', "params" => ["id" => $table->getModel()->id]],
+                'destroy'   => ['name' => 'disableTeacher', "params" => ["id" => $table->getModel()->id]]
             ])
             ->query(function (Builder $query) {
                 $query->addSelect("teachers.*");

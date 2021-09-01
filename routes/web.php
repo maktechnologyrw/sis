@@ -49,6 +49,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get("teachers", [TeacherController::class, 'index'])->name('teachers');
     Route::view('teachers/add', 'teachers.create')->name('addTeacher');
     Route::get("teacher/{id}/update", [TeacherController::class, 'edit'])->name("updateTeacher");
+    Route::delete("teacher/{id}/disable", [TeacherController::class, 'disable'])->name("disableTeacher");
     // Route::view('marking', 'marking.index')->name('marking');
     Route::get('marking', [MarkingController::class, 'index'])->name('marking');
     Route::view('marking/start', 'marking.start')->name('startMarkingSession');
