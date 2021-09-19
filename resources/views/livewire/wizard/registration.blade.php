@@ -1,7 +1,7 @@
 <div class="p-6">
     @if (!empty($successMsg))
         <div class="alert alert-success">
-            {{ json_encode($successMsg) }}
+            {{-- {{ json_encode($successMsg) }} --}}
         </div>
     @endif
     <ul class="w-full steps dark:text-gray-200" data-theme="cupcake">
@@ -15,38 +15,18 @@
     <div class="row setup-content {{ $currentStep != 1 ? 'hidden' : '' }}" id="step-1">
         <div class="col-md-12">
             <h3> Step 1</h3>
-            <label class="block text-sm my-4">
-                <span class="text-gray-700 dark:text-gray-400">School Name:</span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="ex: G.S Murambi" type="text" wire:model="school.name" required autofocus />
-                @error('school.name') <span class="error">{{ $message }}</span> @enderror
-            </label>
-            <label class="block text-sm my-4">
-                <span class="text-gray-700 dark:text-gray-400">School Motto:</span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="ex: No Pain, No Gain" type="text" wire:model="school.motto" />
-                @error('school.motto') <span class="error">{{ $message }}</span> @enderror
-            </label>
-            <label class="block text-sm my-4">
-                <span class="text-gray-700 dark:text-gray-400">Establishment Year:</span>
-                <input
-                    class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                    placeholder="ex: 2011" type="text" wire:model="school.established_at" />
-                @error('school.established_at') <span class="error">{{ $message }}</span> @enderror
-            </label>
-            {{-- <p>
-                <a class="text-sm font-medium text-purple-600 dark:text-purple-400 hover:underline"
-                    href="{{ route('login') }}">
-                    Already have an account? Login
-                </a>
-            </p> --}}
+            <x-daisy.input label="School Name" placeholder="ex: G.S Murambi" wire:model="school.name" />
+            <x-daisy.input label="School Motto" placeholder="ex: No Pain, No Gain" wire:model="school.motto" />
+            <x-daisy.input label="Establishment Year" placeholder="ex: 2011" wire:model="school.established_at" />
             <div class="float-right my-4">
-                <button
-                    class="px-10 py-4 text-md uppercase font-bold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    wire:click="firstStepSubmit" type="button">
+                <button class="btn btn-primary" wire:click="firstStepSubmit" wire:loading.class="loading disabled">
                     Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-4" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
                 </button>
             </div>
         </div>
@@ -54,99 +34,90 @@
     <div class="row setup-content {{ $currentStep != 2 ? 'hidden' : '' }}" id="step-2">
         <div class="col-md-12">
             <h3> School Location</h3>
-            <label class="block mt-4 text-sm">
-                <span class="text-gray-700 dark:text-gray-400">
-                    Province
-                </span>
-                <div>
-                    <select
-                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        wire:model="school.province" wire:init="loadProvinces" wire:change="setDistricts()">
-                        <option></option>
-                        @foreach ($provinces as $province)
-                            <option value="{{ $province['provincecode'] }}">{{ $province['provincename'] }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('school.province') <span class="error">{{ $message }}</span> @enderror
-                </div>
-            </label>
-            <label class="block mt-4 text-sm">
-                <span class="text-gray-700 dark:text-gray-400">
-                    District
-                </span>
-                <div>
-                    <select
-                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        wire:model="school.district" wire:change="setSectors()">
-                        <option></option>
-                        @foreach ($districts as $district)
-                            <option value="{{ $district['DistrictCode'] }}">{{ $district['DistrictName'] }}
-                            </option>
-                        @endforeach
-                    </select>
-                    @error('school.district') <span class="error">{{ $message }}</span> @enderror
-                </div>
-            </label>
-            <label class="block mt-4 text-sm">
-                <span class="text-gray-700 dark:text-gray-400">
-                    Sector
-                </span>
-                <div>
-                    <select
-                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        wire:model="school.sector" wire:change="setCells()">
-                        <option></option>
-                        @foreach ($sectors as $sector)
-                            <option value="{{ $sector['SectorCode'] }}">{{ $sector['SectorName'] }}</option>
-                        @endforeach
-                    </select>
-                    @error('school.sector') <span class="error">{{ $message }}</span> @enderror
-                </div>
-            </label>
-            <label class="block mt-4 text-sm">
-                <span class="text-gray-700 dark:text-gray-400">
-                    Cell
-                </span>
-                <div>
-                    <select
-                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        wire:model="school.cell" wire:change="setVillages()">
-                        <option></option>
-                        @foreach ($cells as $cell)
-                            <option value="{{ $cell['CellCode'] }}">{{ $cell['CellName'] }}</option>
-                        @endforeach
-                    </select>
-                    @error('school.cell') <span class="error">{{ $message }}</span> @enderror
-                </div>
-            </label>
-            <label class="block mt-4 text-sm">
-                <span class="text-gray-700 dark:text-gray-400">
-                    Village
-                </span>
-                <div>
-                    <select
-                        class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                        wire:model="school.village">
-                        <option></option>
-                        @foreach ($villages as $village)
-                            <option value="{{ $village['VillageCode'] }}">{{ $village['VillageName'] }}</option>
-                        @endforeach
-                    </select>
-                    @error('school.village') <span class="error">{{ $message }}</span> @enderror
-                </div>
-            </label>
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text dark:text-gray-300">Choose Province</span>
+                </label>
+                <select class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                    wire:model="school.province" wire:change="setDistricts()" wire:init="loadProvinces">
+                    <option disabled="disabled" selected="selected">Choose Province</option>
+                    @foreach ($provinces as $province)
+                        <option value="{{ $province['provincecode'] }}">{{ $province['provincename'] }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text dark:text-gray-300">Choose District</span>
+                </label>
+                <select class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                    wire:model="school.district" wire:change="setSectors()">
+                    <option disabled="disabled" selected="selected">Choose District</option>
+                    @foreach ($districts as $district)
+                        <option value="{{ $district['DistrictCode'] }}">{{ $district['DistrictName'] }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text dark:text-gray-300">Choose Sector</span>
+                </label>
+                <select class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                    wire:model="school.sector" wire:change="setCells()">
+                    <option disabled="disabled" selected="selected">Choose Sector</option>
+                    @foreach ($sectors as $sector)
+                        <option value="{{ $sector['SectorCode'] }}">{{ $sector['SectorName'] }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-control">
+                <label class="label">
+                    <span class="label-text dark:text-gray-300">Choose Cell</span>
+                </label>
+                <select class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                    wire:model="school.cell" wire:change="setVillages()">
+                    <option disabled="disabled" selected="selected">Choose Cell</option>
+                    @foreach ($cells as $cell)
+                        <option value="{{ $cell['CellCode'] }}">{{ $cell['CellName'] }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-control md:col-span-2">
+                <label class="label">
+                    <span class="label-text dark:text-gray-300">Choose Village</span>
+                </label>
+                <select class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                    wire:model="school.village">
+                    <option disabled="disabled" selected="selected">Choose Village</option>
+                    @foreach ($villages as $village)
+                        <option value="{{ $village['VillageCode'] }}">{{ $village['VillageName'] }}</option>
+                    @endforeach
+                </select>
+            </div>
             <div class="float-right my-4">
-                <button
-                    class="px-10 py-4 text-md uppercase font-bold leading-5 text-purple-600 transition-colors duration-150 bg-white border border-purple-600 rounded-lg active:bg-purple-600 active:text-white hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    wire:click="back({{ $currentStep - 1 }})" type="button">
-                    Back
-                </button>
-                <button
-                    class="px-10 py-4 text-md uppercase font-bold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    wire:click="secondStepSubmit" type="button">
-                    Next
-                </button>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" wire:click="back({{ $currentStep - 1 }})"
+                        wire:loading.class="loading disabled">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Back
+                    </button>
+                    <button class="btn btn-primary" wire:click="secondStepSubmit" wire:loading.class="loading disabled">
+                        Next
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-4" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -154,40 +125,55 @@
     <div class="row setup-content {{ $currentStep != 3 ? 'hidden' : '' }}" id="step-3">
         <div class="col-md-12">
             <div class="text-right">
-                <button type="button" class="btn btn-primary" wire:click="incrementCategories()">Add Category</button>
+                <button type="button" class="btn btn-primary btn-outline" wire:click="incrementCategories()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-2" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Add Category
+                </button>
             </div>
         </div>
         <div class="col-md-12">
             @for ($i = 0; $i < $this->classCategoriesCount; $i++)
-                <label class="block mt-4 text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">
-                        Category {{ $i + 1 }}:
-                    </span>
-                    <div>
-                        <select
-                            class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                            wire:model="categories.{{ $i }}">
-                            <option></option>
-                            @foreach ($this->classCategories as $classCategory)
-                                <option value="{{ $classCategory['id'] }}">{{ $classCategory['name'] }}</option>
-                            @endforeach
-                        </select>
-                        @error('categories.{{ $i }}') <span class="error">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </label>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text dark:text-gray-300">Category {{ $i + 1 }}</span>
+                    </label>
+                    <select
+                        class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                        wire:model="categories.{{ $i }}">
+                        <option disabled="disabled" selected="selected">Choose Category</option>
+                        @foreach ($this->classCategories as $classCategory)
+                            <option value="{{ $classCategory['id'] }}">{{ $classCategory['name'] }}</option>
+                        @endforeach
+                    </select>
+                </div>
             @endfor
             <div class="float-right my-4">
-                <button
-                    class="px-10 py-4 text-md uppercase font-bold leading-5 text-purple-600 transition-colors duration-150 bg-white border border-purple-600 rounded-lg active:bg-purple-600 active:text-white hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    wire:click="back({{ $currentStep - 1 }})" type="button">
-                    Back
-                </button>
-                <button
-                    class="px-10 py-4 text-md uppercase font-bold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                    wire:click="thirdStepSubmit" type="button">
-                    Next
-                </button>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" wire:click="back({{ $currentStep - 1 }})"
+                        wire:loading.class="loading disabled">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Back
+                    </button>
+                    <button class="btn btn-primary" wire:click="thirdStepSubmit" wire:loading.class="loading disabled">
+                        Next
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-4" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -195,111 +181,108 @@
     <div class="row setup-content {{ $currentStep != 4 ? 'hidden' : '' }}" id="step-6">
         <div class="col-md-12">
             <div class="text-right">
-                <button type="button" class="btn btn-primary" wire:click="incrementClassRooms()">Add Class
-                    Year</button>
+                <button type="button" class="btn btn-primary btn-outline" wire:click="incrementClassRooms()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mx-2" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Add Class Year
+                </button>
             </div>
         </div>
         <div class="grid grid-cols-4 gap-4">
             @for ($i = 0; $i < $this->classRoomsCount; $i++)
-                <label class="block mt-4 text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">
-                        Category {{ $i + 1 }}:
-                    </span>
-                    <div>
-                        <select
-                            class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                            wire:model="rooms.{{ $i }}.category">
-                            <option></option>
-                            @foreach ($this->classCategoriesData as $classCategoryData)
-                                <option value="{{ $classCategoryData->id }}">
-                                    {{ $classCategoryData->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('rooms.{{ $i }}.category') <span class="error">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </label>
-                <label class="block mt-4 text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">
-                        Level {{ $i + 1 }}:
-                        {{-- {{ json_encode($this->classCategoryLevels) }} --}}
-                        {{-- {{ json_encode($this->classCategoryLevelYears) }} --}}
-                        {{-- {{ json_encode($this->classCategoriesData) }} --}}
-                        {{-- {{ json_encode($this->rooms) }} --}}
-                    </span>
-                    <div>
-                        <select
-                            class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                            wire:model="rooms.{{ $i }}.level">
-                            <option></option>
-                            @foreach ($this->classCategoryLevels as $classLevel)
-                                @for ($u = 0; $u < count($this->rooms); $u++)
-                                    @if ($i == $u)
-                                        @isset($this->rooms[$i]['category'])
-                                            @foreach ($this->classCategoriesData as $classCategoryData)
-                                                {{ json_encode($classCategoryData) }}
-                                                @if ($classCategoryData->id == $this->rooms[$i]['category'])
-                                                    @if ($classLevel->class_category_id == $classCategoryData->parent_id)
-                                                        <option value="{{ $classLevel->id }}">{{ $classLevel->name }}
-                                                        </option>
-                                                    @endif
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text dark:text-gray-300">Category {{ $i + 1 }}</span>
+                    </label>
+                    <select
+                        class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                        wire:model="rooms.{{ $i }}.category">
+                        <option disabled="disabled" selected="selected">Choose Category</option>
+                        @foreach ($this->classCategoriesData as $classCategoryData)
+                            <option value="{{ $classCategoryData->id }}">
+                                {{ $classCategoryData->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text dark:text-gray-300">Level {{ $i + 1 }}</span>
+                    </label>
+                    <select
+                        class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                        wire:model="rooms.{{ $i }}.level">
+                        <option disabled="disabled" selected="selected">Choose Category</option>
+                        @foreach ($this->classCategoryLevels as $classLevel)
+                            @for ($u = 0; $u < count($this->rooms); $u++)
+                                @if ($i == $u)
+                                    @isset($this->rooms[$i]['category'])
+                                        @foreach ($this->classCategoriesData as $classCategoryData)
+                                            {{ json_encode($classCategoryData) }}
+                                            @if ($classCategoryData->id == $this->rooms[$i]['category'])
+                                                @if ($classLevel->class_category_id == $classCategoryData->parent_id)
+                                                    <option value="{{ $classLevel->id }}">{{ $classLevel->name }}
+                                                    </option>
                                                 @endif
-                                            @endforeach
-                                        @endisset
-                                    @endif
-                                @endfor
-                            @endforeach
-                        </select>
-                        @error('rooms.{{ $i }}.level') <span class="error">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </label>
-                <label class="block mt-4 text-sm">
-                    <span class="text-gray-700 dark:text-gray-400">
-                        Class Year {{ $i + 1 }}:
-                    </span>
-                    <div>
-                        <select
-                            class="block w-full mt-1 text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
-                            wire:model="rooms.{{ $i }}.year">
-                            <option></option>
-                            @foreach ($this->classCategoryLevelYears as $classYear)
-                                @for ($u = 0; $u < count($this->rooms); $u++)
-                                    @if ($i == $u)
-                                        @isset($this->rooms[$i]['level'])
-                                            @if ($classYear->level_id == $this->rooms[$i]['level'])
-                                                <option value="{{ $classYear['id'] }}">
-                                                    {{ $classYear['name'] }}</option>
                                             @endif
-                                        @endisset
-                                    @endif
-                                @endfor
-                            @endforeach
-                        </select>
-                        @error('rooms.{{ $i }}.year') <span class="error">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </label>
-                <label class="block text-sm my-4">
-                    <span class="text-gray-700 dark:text-gray-400">Room Identifier:</span>
-                    <input
-                        class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
-                        placeholder="ex: 2011" type="text" wire:model="rooms.{{ $i }}.room" />
-                    @error('rooms.{{ $i }}.room') <span class="error">{{ $message }}</span> @enderror
-                </label>
+                                        @endforeach
+                                    @endisset
+                                @endif
+                            @endfor
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text dark:text-gray-300">Class Year {{ $i + 1 }}</span>
+                    </label>
+                    <select
+                        class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
+                        wire:model="rooms.{{ $i }}.year">
+                        <option disabled="disabled" selected="selected">Choose Category</option>
+                        @foreach ($this->classCategoryLevelYears as $classYear)
+                            @for ($u = 0; $u < count($this->rooms); $u++)
+                                @if ($i == $u)
+                                    @isset($this->rooms[$i]['level'])
+                                        @if ($classYear->level_id == $this->rooms[$i]['level'])
+                                            <option value="{{ $classYear['id'] }}">
+                                                {{ $classYear['name'] }}</option>
+                                        @endif
+                                    @endisset
+                                @endif
+                            @endfor
+                        @endforeach
+                    </select>
+                </div>
+                <x-daisy.input label="Room Identifier" placeholder="ex: A"
+                    wire:model="rooms.{{ $i }}.room" />
             @endfor
         </div>
         <div class="float-right my-4">
-            <button
-                class="px-10 py-4 text-md uppercase font-bold leading-5 text-purple-600 transition-colors duration-150 bg-white border border-purple-600 rounded-lg active:bg-purple-600 active:text-white hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                wire:click="back({{ $currentStep - 1 }})" type="button">
-                Back
-            </button>
-            <button
-                class="px-10 py-4 text-md uppercase font-bold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                wire:click="fourthStepSubmit" type="button">
-                Next
-            </button>
+            <div class="btn-group">
+                <button class="btn btn-secondary" wire:click="back({{ $currentStep - 1 }})"
+                    wire:loading.class="loading disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back
+                </button>
+                <button class="btn btn-primary" wire:click="fourthStepSubmit" wire:loading.class="loading disabled">
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-4" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -327,41 +310,65 @@
         </div>
 
         <div class="float-right my-4">
-            <button
-                class="px-10 py-4 text-md uppercase font-bold leading-5 text-purple-600 transition-colors duration-150 bg-white border border-purple-600 rounded-lg active:bg-purple-600 active:text-white hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                wire:click="back({{ $currentStep - 1 }})" type="button">
-                Back
-            </button>
-            <button
-                class="px-10 py-4 text-md uppercase font-bold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                wire:click="fifthStepSubmit" type="button">
-                Next
-            </button>
+            <div class="btn-group">
+                <button class="btn btn-secondary" wire:click="back({{ $currentStep - 1 }})"
+                    wire:loading.class="loading disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back
+                </button>
+                <button class="btn btn-primary" wire:click="fifthStepSubmit" wire:loading.class="loading disabled">
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-4" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 
     <div class="row setup-content {{ $currentStep != 6 ? 'hidden' : '' }}" id="step-7">
         <div class="col-md-12">
             <h3> Step 3</h3>
-            <label class="block text-sm">
+            <x-daisy.input label="Admin Name" placeholder="ex: John Doe" wire:model="admin.name" />
+            {{-- <label class="block text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Name</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     placeholder="Jane Doe" type="text" wire:model="admin.name" required autocomplete="name" />
-            </label>
-            <label class="block mt-4 text-sm">
+            </label> --}}
+            <x-daisy.input label="Admin Email" placeholder="ex: example@gmail.com" type="email"
+                wire:model="admin.email" />
+            {{-- <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Email</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     placeholder="Jane Doe" type="email" wire:model="admin.email" required />
-            </label>
-            <label class="block mt-4 text-sm">
+            </label> --}}
+            <x-daisy.input label="Admin Password" placeholder="***************" type="password"
+                wire:model="admin.password" />
+            {{-- <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">Password</span>
                 <input
                     class="block w-full mt-1 text-sm dark:border-gray-600 dark:bg-gray-700 focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:text-gray-300 dark:focus:shadow-outline-gray form-input"
                     placeholder="***************" type="password" wire:model="admin.password" required
                     autocomplete="new-password" />
-            </label>
+            </label> --}}
+            {{-- <x-daisy.input label="Confirm password" placeholder="***************" type="password" wire:model="admin.password_confirmation" /> --}}
+            {{-- <div class="form-control">
+                <label class="label">
+                    <span class="label-text dark:text-gray-300">Confirm password</span>
+                </label>
+                <input placeholder="***************" type="password" wire:model="admin.password_confirmation"
+                    class="input input-bordered shadow-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:focus:shadow-outline-gray">
+            </div> --}}
             <label class="block mt-4 text-sm">
                 <span class="text-gray-700 dark:text-gray-400">
                     Confirm password
@@ -377,16 +384,27 @@
         </div>
 
         <div class="float-right my-4">
-            <button
-                class="px-10 py-4 text-md uppercase font-bold leading-5 text-purple-600 transition-colors duration-150 bg-white border border-purple-600 rounded-lg active:bg-purple-600 active:text-white hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                wire:click="back({{ $currentStep - 1 }})" type="button">
-                Back
-            </button>
-            <button
-                class="px-10 py-4 text-md uppercase font-bold leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
-                wire:click="sixthStepSubmit" type="button">
-                Finish
-            </button>
+            <div class="btn-group">
+                <button class="btn btn-secondary" wire:click="back({{ $currentStep - 1 }})"
+                    wire:loading.class="loading disabled">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Back
+                </button>
+                <button class="btn btn-primary" wire:click="sixthStepSubmit" wire:loading.class="loading disabled">
+                    Next
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-4" viewBox="0 0 20 20"
+                        fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
         </div>
     </div>
 </div>

@@ -258,6 +258,16 @@ class Create extends Component
 
         $userPhoneData->save();
 
+        $newUser->assignRole("parent");
+
+        $schoolUser = new SchoolUser;
+
+        $schoolUser->user_id = $newUser->id;
+        $schoolUser->school_id = $this->user->schoolUser->school_id;
+        $schoolUser->user_type = "Parent";
+
+        $schoolUser->save();
+
         $studentParentData = new StudentParent;
 
         $studentParentData->student_id = $this->savedStudentData->id;

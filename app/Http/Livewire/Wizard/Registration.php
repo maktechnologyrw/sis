@@ -259,7 +259,7 @@ class Registration extends Component
 
         $globalMarkables = Markable::all();
 
-        for ($i=0; $i < count($globalMarkables); $i++) {
+        for ($i = 0; $i < count($globalMarkables); $i++) {
             $globalMarkable = $globalMarkables[$i];
 
             $schoolMarkable = new SchoolMarkable;
@@ -274,7 +274,7 @@ class Registration extends Component
 
         $globalTerms = Term::all();
 
-        for ($i=0; $i < count($globalTerms); $i++) {
+        for ($i = 0; $i < count($globalTerms); $i++) {
             $globalTerm = $globalTerms[$i];
 
             $schoolTerm = new SchoolTerm;
@@ -353,34 +353,92 @@ class Registration extends Component
 
             // Copy Used Level To School
 
-            $schoolClassLevel = SchoolClassLevel::firstOrNew(["school_id" => $this->schoolData->id, "parent_id" => $globalClassLevel->id]);
+            $schoolClassLevels = SchoolClassLevel::where("school_id", $this->schoolData->id)->where("parent_id", $globalClassLevel->id)->get();
 
-            $schoolClassLevel->name = $globalClassLevel->name;
-            $schoolClassLevel->abbreviation = $globalClassLevel->abbreviation;
+            if (count($schoolClassLevels) == 0) {
+                $schoolClassLevel = new SchoolClassLevel;
 
-            $schoolClassLevel->save();
+                $schoolClassLevel->school_id = $this->schoolData->id;
+                $schoolClassLevel->parent_id = $globalClassLevel->id;
+                $schoolClassLevel->name = $globalClassLevel->name;
+                $schoolClassLevel->abbreviation = $globalClassLevel->abbreviation;
 
-            $schoolClassCategoryLevel = SchoolClassCategoryLevel::firstOrNew(["school_id" => $this->schoolData->id, "parent_id" => $globalClassCategoryLevel->id]);
+                $schoolClassLevel->save();
+            } else {
+                $schoolClassLevel = $schoolClassLevels[0];
 
-            $schoolClassCategoryLevel->class_category_id = $roomCategoryId;
-            $schoolClassCategoryLevel->class_level_id = $schoolClassLevel->id;
-            $schoolClassCategoryLevel->name = $globalClassCategoryLevel->name;
+                $schoolClassLevel->name = $globalClassLevel->name;
+                $schoolClassLevel->abbreviation = $globalClassLevel->abbreviation;
 
-            $schoolClassCategoryLevel->save();
+                $schoolClassLevel->save();
+            }
+
+            $schoolClassCategoryLevels = SchoolClassCategoryLevel::where("school_id", $this->schoolData->id)->where("parent_id", $globalClassCategoryLevel->id)->get();
+            // $this->successMsg = $schoolClassCategoryLevels;
+            // $schoolClassCategoryLevel = SchoolClassCategoryLevel::firstOrNew(["school_id" => $this->schoolData->id, "parent_id" => $globalClassCategoryLevel->id]);
+
+            if (count($schoolClassCategoryLevels) == 0) {
+                $schoolClassCategoryLevel = new SchoolClassCategoryLevel;
+
+                $schoolClassCategoryLevel->school_id = $this->schoolData->id;
+                $schoolClassCategoryLevel->parent_id = $globalClassCategoryLevel->id;
+                $schoolClassCategoryLevel->class_category_id = $roomCategoryId;
+                $schoolClassCategoryLevel->class_level_id = $schoolClassLevel->id;
+                $schoolClassCategoryLevel->name = $globalClassCategoryLevel->name;
+
+                $schoolClassCategoryLevel->save();
+            } else {
+                $schoolClassCategoryLevel = $schoolClassCategoryLevels[0];
+
+                $schoolClassCategoryLevel->class_category_id = $roomCategoryId;
+                $schoolClassCategoryLevel->class_level_id = $schoolClassLevel->id;
+                $schoolClassCategoryLevel->name = $globalClassCategoryLevel->name;
+
+                $schoolClassCategoryLevel->save();
+            }
 
             // Copy Used Year To School
-            $schoolClassYear = SchoolClassYear::firstOrNew(["school_id" => $this->schoolData->id, "parent_id" => $globalClassYear->id]);
+            $schoolClassYears = SchoolClassYear::where("school_id", $this->schoolData->id)->where("parent_id", $globalClassYear->id)->get();
+            // $schoolClassYear = SchoolClassYear::firstOrNew(["school_id" => $this->schoolData->id, "parent_id" => $globalClassYear->id]);
 
-            $schoolClassYear->name = $globalClassYear->name;
-            $schoolClassYear->display_name = $globalClassYear->display_name;
+            if (count($schoolClassYears) == 0) {
+                $schoolClassYear = new SchoolClassYear;
 
-            $schoolClassYear->save();
+                $schoolClassYear->school_id = $this->schoolData->id;
+                $schoolClassYear->parent_id = $globalClassYear->id;
+                $schoolClassYear->name = $globalClassYear->name;
+                $schoolClassYear->display_name = $globalClassYear->display_name;
 
-            $schoolClassCategoryLevelYear = SchoolClassCategoryLevelYear::firstOrNew(["school_id" => $this->schoolData->id, "parent_id" => $globalClassCategoryLevelYear->id, "level_id" => $schoolClassCategoryLevel->id, "year_id" => $schoolClassYear->id]);
+                $schoolClassYear->save();
+            } else {
+                $schoolClassYear = $schoolClassYears[0];
 
-            $schoolClassCategoryLevelYear->name = $globalClassCategoryLevelYear->name;
+                $schoolClassYear->name = $globalClassYear->name;
+                $schoolClassYear->display_name = $globalClassYear->display_name;
 
-            $schoolClassCategoryLevelYear->save();
+                $schoolClassYear->save();
+            }
+
+            $schoolClassCategoryLevelYears = SchoolClassCategoryLevelYear::where("school_id", $this->schoolData->id)->where("parent_id", $globalClassCategoryLevelYear->id)->where("level_id", $schoolClassCategoryLevel->id)->where("year_id", $schoolClassYear->id)->get();
+            // $schoolClassCategoryLevelYear = SchoolClassCategoryLevelYear::firstOrNew(["school_id" => $this->schoolData->id, "parent_id" => $globalClassCategoryLevelYear->id, "level_id" => $schoolClassCategoryLevel->id, "year_id" => $schoolClassYear->id]);
+
+            if (count($schoolClassCategoryLevelYears) == 0) {
+                $schoolClassCategoryLevelYear = new SchoolClassCategoryLevelYear;
+
+                $schoolClassCategoryLevelYear->school_id = $this->schoolData->id;
+                $schoolClassCategoryLevelYear->parent_id = $globalClassCategoryLevelYear->id;
+                $schoolClassCategoryLevelYear->level_id = $schoolClassCategoryLevel->id;
+                $schoolClassCategoryLevelYear->year_id = $schoolClassYear->id;
+                $schoolClassCategoryLevelYear->name = $globalClassCategoryLevelYear->name;
+
+                $schoolClassCategoryLevelYear->save();
+            } else {
+                $schoolClassCategoryLevelYear = $schoolClassCategoryLevelYears[0];
+
+                $schoolClassCategoryLevelYear->name = $globalClassCategoryLevelYear->name;
+
+                $schoolClassCategoryLevelYear->save();
+            }
 
 
             $classSubjects = ClassSubject::where("class_id", "=", $globalClassCategoryLevelYear->id)->get();
@@ -506,7 +564,7 @@ class Registration extends Component
 
         $schoolTerms = SchoolTerm::where("school_id", "=", $this->schoolData->id)->get();
 
-        for ($i=0; $i < count($schoolTerms); $i++) {
+        for ($i = 0; $i < count($schoolTerms); $i++) {
             $schoolTerm = $schoolTerms[$i];
 
             $academicTerm = new AcademicYearTerm;

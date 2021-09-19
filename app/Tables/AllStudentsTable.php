@@ -13,10 +13,33 @@ use Okipa\LaravelTable\Table;
 class AllStudentsTable extends AbstractTable
 {
     public User $user;
+    public array $routes;
 
     public function __construct()
     {
         $this->user = Auth::user();
+
+        $this->routes['index'] = ['name' => 'students'];
+    }
+
+    public function loadRoutes(Table $table)
+    {
+        if ($this->user->can('create students')) {
+            $this->routes['create'] = ['name' => 'addStudent'];
+        }
+
+        if ($this->user->can('edit students')) {
+            $this->routes['edit'] = ['name' => 'updateStudent', "params" => ["id" => $table->getModel()->id]];
+        }
+
+        if ($this->user->can('delete students')) {
+            $this->routes['destroy'] = ['name' => 'disableStudent', "params" => ["id" => $table->getModel()->id]];
+        }
+        if ($this->user->can('view students')) {
+            $this->routes['show'] = ['name' => 'updateStudent', "params" => ["id" => $table->getModel()->id]];
+        }
+
+        return $this->routes;
     }
 
     /**
@@ -29,13 +52,7 @@ class AllStudentsTable extends AbstractTable
     {
         $table = new Table();
         return ($table)->model(Student::class)
-            ->routes([
-                'index'   => ['name' => 'students'],
-                'create'   => ['name' => 'addStudent'],
-                'edit'   => ['name' => 'updateStudent', "params" => ["id" => $table->getModel()->id]],
-                'show'   => ['name' => 'updateStudent', "params" => ["id" => $table->getModel()->id]],
-                'destroy'   => ['name' => 'disableStudent', "params" => ["id" => $table->getModel()->id]]
-            ])
+            ->routes($this->loadRoutes($table))
             ->query(function (Builder $query) {
                 $query->select("students.*");
                 $query->leftJoin("student_registrations", "student_registrations.student_id", "=", "students.id");

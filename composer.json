@@ -20,6 +20,7 @@
         "needim/noty": "^3.1",
         "okipa/laravel-table": "4.0.4",
         "rsmalc/laravel-noty": "^2.4",
+        "spatie/laravel-html": "^2.30",
         "spatie/laravel-medialibrary": "^9.0.0",
         "spatie/laravel-permission": "^4.2",
         "yajra/laravel-datatables-oracle": "^9.18"

@@ -35,9 +35,15 @@ class PermissionSeeder extends Seeder
         Permission::create(['name' => 'view own students marks']);
         Permission::create(['name' => 'view own students reports']);
         Permission::create(['name' => 'view own students attendance']);
+        Permission::create(['name' => 'create students attendance list']);
+        Permission::create(['name' => 'edit students attendance list']);
+        Permission::create(['name' => 'view students attendance list']);
+        Permission::create(['name' => 'view students attendance']);
+        Permission::create(['name' => 'delete students attendance list']);
 
         // create roles and assign existing permissions
         $role1 = Role::create(['name' => 'admin']);
+        
         $role1->givePermissionTo('create students');
         $role1->givePermissionTo('edit students');
         $role1->givePermissionTo('delete students');
@@ -48,10 +54,16 @@ class PermissionSeeder extends Seeder
         $role1->givePermissionTo('view teachers');
 
         $role2 = Role::create(["name" => "teacher"]);
+
         $role2->givePermissionTo('view students');
         $role2->givePermissionTo('add marks to students');
         $role2->givePermissionTo('edit eligible marks');
         $role2->givePermissionTo('delete eligible marks');
+        $role2->givePermissionTo('create students attendance list');
+        $role2->givePermissionTo('edit students attendance list');
+        $role2->givePermissionTo('view students attendance list');
+        $role2->givePermissionTo('view students attendance');
+        $role2->givePermissionTo('delete students attendance list');
 
         $role3 = Role::create(["name" => "parent"]);
 

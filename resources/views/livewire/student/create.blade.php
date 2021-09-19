@@ -359,6 +359,7 @@
                 <select class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
                     wire:model="registration.year">
                     <option disabled="disabled" selected="selected">Choose Class</option>
+                    <option value=""></option>
                     @foreach ($this->school_class_years as $classYear)
                         <option value="{{ $classYear['id'] }}">{{ $classYear['name'] }}</option>
                     @endforeach
@@ -371,7 +372,8 @@
             <div class="btn-group">
                 <button class="btn btn-secondary" wire:click="back({{ $currentStep - 1 }})"
                     wire:loading.class="loading disabled">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                        fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
                             clip-rule="evenodd" />
@@ -399,6 +401,7 @@
                 <select class="select select-bordered w-full dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700"
                     wire:model="enrollment.room">
                     <option disabled="disabled" selected="selected">Choose Class Room</option>
+                    <option value=""></option>
                     @foreach ($this->school_class_rooms as $classRoom)
                         <option value="{{ $classRoom['id'] }}">{{ $classRoom['name'] }}</option>
                     @endforeach
@@ -412,7 +415,8 @@
             <div class="btn-group">
                 <button class="btn btn-secondary" wire:click="back({{ $currentStep - 1 }})"
                     wire:loading.class="loading disabled">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                        fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M10 18a8 8 0 100-16 8 8 0 000 16zm.707-10.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l1.293-1.293z"
                             clip-rule="evenodd" />

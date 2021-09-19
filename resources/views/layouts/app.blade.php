@@ -27,11 +27,10 @@
     <script src="{{ asset('js/charts-lines.js') }}" defer></script>
     <script src="{{ asset('js/charts-pie.js') }}" defer></script>
     <script src="{{ asset('js/charts-bars.js') }}" defer></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script src="{{ asset('js/html5sortable.min.js') }}"></script>
     <script>
-        import Turbolinks from 'turbolinks';
-        Turbolinks.start()
+        /* import Turbolinks from 'turbolinks';
+                    Turbolinks.start() */
     </script>
 
     <!-- Scripts -->
@@ -39,6 +38,8 @@
 </head>
 
 <body>
+    <script src="{{ asset('js/dragula.min.js') }} "></script>
+    <link rel="stylesheet" href="{{ asset('css/dragula.min.css') }}" />
     <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
         @include('layouts.menu')
         @include('layouts.mobile-menu')
@@ -56,7 +57,5 @@
         @livewireScripts
     </div>
 </body>
-<script>
-</script>
 
 </html>

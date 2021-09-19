@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\MarkingController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
 use App\Models\SchoolUser;
@@ -40,19 +42,26 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::view('modals', 'modals')->name('modals');
     Route::view('tables', 'tables')->name('tables');
     Route::view('calendar', 'calendar')->name('calendar');
-    // Route::view('students', 'students.index')->name('students');
+
     Route::get("students", [StudentController::class, 'index'])->name('students');
     Route::view('students/add', 'students.create')->name('addStudent');
     Route::get("student/{id}/update", [StudentController::class, 'edit'])->name("updateStudent");
     Route::delete("student/{id}/disable", [StudentController::class, 'disable'])->name("disableStudent");
-    // Route::view('teachers', 'teachers.index')->name('teachers');
+
     Route::get("teachers", [TeacherController::class, 'index'])->name('teachers');
     Route::view('teachers/add', 'teachers.create')->name('addTeacher');
     Route::get("teacher/{id}/update", [TeacherController::class, 'edit'])->name("updateTeacher");
     Route::delete("teacher/{id}/disable", [TeacherController::class, 'disable'])->name("disableTeacher");
-    // Route::view('marking', 'marking.index')->name('marking');
+
     Route::get('marking', [MarkingController::class, 'index'])->name('marking');
     Route::view('marking/start', 'marking.start')->name('startMarkingSession');
     Route::get('marking/{id}/students', [MarkingController::class, 'addMarks']);
-    // Route::view('marking/{id}/students', 'marking.students')->name('markingStudents');
+
+    Route::get('attendance', [AttendanceController::class, 'index'])->name('attendance');
+    Route::view('attendance/start', 'attendance.start')->name('startAttendanceSession');
+    Route::get('attendance/{id}/students', [AttendanceController::class, 'showStudents']);
+
+    Route::get("settings", [SettingsController::class, 'index'])->name('settings');
+    Route::view("settings/school/info", 'settings.school.info')->name("schoolInfoSettings");
+    Route::view("settings/school/timetable", 'settings.school.timetable')->name("schoolTimetableSettings");
 });

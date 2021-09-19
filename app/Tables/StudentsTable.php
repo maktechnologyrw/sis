@@ -71,9 +71,9 @@ class StudentsTable extends AbstractTable
     protected function columns(Table $table): void
     {
         $table->column('id')->sortable()->title("N&deg;");
-        $table->column("first_name")->searchable()->title("First Name");
-        $table->column("last_name")->searchable()->title("Last Name");
-        $table->column("sex")->searchable()->title("Sex");
+        $table->column("first_name")->searchable()->title("First Name")->sortable();
+        $table->column("last_name")->searchable()->title("Last Name")->sortable();
+        $table->column("sex")->searchable()->title("Sex")->sortable();
         $table->column()->title("Status")->html(function (Student $student) {
             $currentAcademicYear = CurrentSchoolAcademicYear::select("year_id")->where("school_id", "=", $this->user->schoolUser->school_id)->get();
             $registration = $student->registrations()->where("year_id", "=", $currentAcademicYear[0]->year_id)->first();

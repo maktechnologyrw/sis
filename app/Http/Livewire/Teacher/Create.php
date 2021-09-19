@@ -207,6 +207,18 @@ class Create extends Component
             "password_confirmation" => "12345678"
         ]);
 
+        $newUser->assignRole("teacher");
+
+        $schoolUser = new SchoolUser;
+
+        $schoolUser->user_id = $newUser->id;
+        $schoolUser->school_id = $this->user->schoolUser->school_id;
+        $schoolUser->user_type = "Teacher";
+        $schoolUser->foreign_model = SchoolTeacher::class;
+        $schoolUser->model_id = $schoolTeacher->id;
+
+        $schoolUser->save();
+
         $this->currentStep = 4;
     }
 

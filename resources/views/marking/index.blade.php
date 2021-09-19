@@ -1,5 +1,11 @@
 <x-app-layout title="Dashboard">
-    <div class="container grid px-6 mx-auto">
+    @php
+        $textClass = 'text-left';
+        if ($table->getPaginator()->isEmpty()) {
+            $textClass = 'text-right';
+        }
+    @endphp
+    <div class="container grid px-6 mx-auto {{ $textClass }}">
         {{-- <ul class="w-full steps dark:text-gray-200" data-theme="cupcake">
             <li class="step step-info">Fly to moon</li>
             <li class="step step-info">Shrink the moon</li>

@@ -28,9 +28,12 @@ use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Faker\Factory;
 use Illuminate\Support\Facades\Route;
+use Livewire\WithFileUploads;
 
 class Update extends Component
 {
+    use WithFileUploads;
+
     public $currentStep = 1;
     public $teacher;
     public $countries;
@@ -55,6 +58,8 @@ class Update extends Component
     public $subjects = [];
     private $faker;
     protected $currentRoute;
+    public $profilePicure;
+    public $countriesString;
 
     public function render()
     {
@@ -71,6 +76,12 @@ class Update extends Component
         $this->schoolClassSubjects = AcademicSubject::where("school_id", "=", $this->user->schoolUser->school_id)->get();
         $this->faker = Factory::create();
         $this->currentRoute = Route::current();
+
+        for ($i = 0; $i < count($this->countries); $i++) {
+            $country = $this->countries[$i];
+
+            $this->countriesString["$country->id"] = $country->nicename;
+        }
 
         if ($this->currentRoute->hasParameter("id")) {
             $this->savedTeacherData = Teacher::find($this->currentRoute->parameters["id"]);
@@ -235,10 +246,11 @@ class Update extends Component
         $this->savedTeacherData->qualification = $this->teacher["qualification"];
         $this->savedTeacherData->birth_country_id = $this->teacher["birth"]["country"];
         $this->savedTeacherData->residential_country_id = $this->teacher["residential"]["country"];
+        // $this->profilePicure->store('photos');
 
         $this->savedTeacherData->save();
 
-        noty('Your message');
+        // noty('Your message');
 
         /* $phoneData = new Phone;
 

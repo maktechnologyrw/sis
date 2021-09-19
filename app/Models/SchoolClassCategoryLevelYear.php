@@ -11,7 +11,13 @@ class SchoolClassCategoryLevelYear extends Model
 
     protected $fillable = ["school_id", "parent_id", "level_id", "year_id"];
 
-    public function schoolClassYear() {
+    public function schoolClassYear()
+    {
         return $this->belongsTo(SchoolClassYear::class, "year_id");
+    }
+
+    public function classRooms()
+    {
+        return $this->hasMany(SchoolClassRoom::class, "year_id");
     }
 }
