@@ -5,6 +5,7 @@ use App\Http\Controllers\MarkingController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TimetableController;
 use App\Models\SchoolUser;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -64,4 +65,7 @@ Route::group(['middleware' => ['auth:sanctum', 'verified']], function () {
     Route::get("settings", [SettingsController::class, 'index'])->name('settings');
     Route::view("settings/school/info", 'settings.school.info')->name("schoolInfoSettings");
     Route::view("settings/school/timetable", 'settings.school.timetable')->name("schoolTimetableSettings");
+
+    Route::get("timetable", [TimetableController::class, 'index'])->name('timetable');
+    Route::view("timetable/new", "timetable.create")->name("createTimetable");
 });

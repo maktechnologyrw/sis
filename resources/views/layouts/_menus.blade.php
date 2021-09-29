@@ -152,6 +152,11 @@
                             <a class="w-full" href="{{ route('attendance') }}">Attendance</a>
                         </li>
                     @endcan
+                    @can('create timetable')
+                        <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
+                            <a class="w-full" href="{{ route('timetable') }}">Timetable</a>
+                        </li>
+                    @endcan
                     <li class="px-2 py-1 transition-colors duration-150 hover:text-gray-800 dark:hover:text-gray-200">
                         <a class="w-full" href="{{ route('settings') }}">Settings</a>
                     </li>
